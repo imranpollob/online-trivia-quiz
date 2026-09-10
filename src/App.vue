@@ -9,6 +9,8 @@
       :theme="theme"
       :muted="isMuted"
       @restart="restart"
+      @end-quiz="promptEndQuiz"
+      @brand-click="promptExitQuiz"
       @toggle-theme="toggleTheme"
       @toggle-sound="toggleSound"
       @open-stats="showStatsModal = true"
@@ -56,13 +58,14 @@
         :timer-duration="timerDuration"
         @answer="handleAnswer"
         @next="goToNextQuestion"
+        @end-early="promptEndQuiz"
       />
 
       <!-- Completed Summary Screen -->
       <Completed
         v-else-if="status === 'complete'"
         :score="score"
-        :total="questionCount"
+        :total="finalQuestionCount"
         :settings="lastSettings"
         :max-streak="maxStreak"
         :history="questionHistory"
@@ -77,6 +80,18 @@
       :stats="userStats"
       @close="showStatsModal = false"
       @reset="resetLifetimeStats"
+    />
+
+    <!-- Confirmation Modal -->
+    <ConfirmModal
+      v-if="showConfirmModal"
+      :title="confirmModalConfig.title"
+      :message="confirmModalConfig.message"
+      :confirm-text="confirmModalConfig.confirmText"
+      :cancel-text="confirmModalConfig.cancelText"
+      :variant="confirmModalConfig.variant"
+      @confirm="confirmModalConfig.onConfirm"
+      @cancel="showConfirmModal = false"
     />
 
     <!-- Brand Footer -->
@@ -100,6 +115,7 @@ import QuestionBox from './components/QuestionBox.vue';
 import Completed from './components/Completed.vue';
 import QuizSetup from './components/QuizSetup.vue';
 import StatsModal from './components/StatsModal.vue';
+import ConfirmModal from './components/ConfirmModal.vue';
 
 import { soundManager } from './utils/audio';
 import { storage } from './utils/storage';
@@ -115,6 +131,17 @@ const errorMessage = ref('');
 const lastSettings = ref(null);
 const timerDuration = ref(0);
 const questionHistory = ref([]);
+const endedEarly = ref(false);
+
+const showConfirmModal = ref(false);
+const confirmModalConfig = ref({
+  title: '',
+  message: '',
+  confirmText: '',
+  cancelText: '',
+  variant: 'primary',
+  onConfirm: () => {}
+});
 
 const theme = ref('light');
 const isMuted = ref(false);
@@ -122,6 +149,12 @@ const showStatsModal = ref(false);
 const userStats = ref(storage.getStats());
 
 const questionCount = computed(() => questions.value.length);
+const finalQuestionCount = computed(() => {
+  if (endedEarly.value && questionHistory.value.length > 0) {
+    return questionHistory.value.length;
+  }
+  return questionCount.value;
+});
 const currentQuestion = computed(() => questions.value[currentIndex.value]);
 
 const shuffleAnswers = options =>
@@ -247,7 +280,9 @@ const initializeQuizState = () => {
   streak.value = 0;
   maxStreak.value = 0;
   questionHistory.value = [];
+  endedEarly.value = false;
   status.value = 'active';
+  soundManager.playQuizStart();
 };
 
 const handleAnswer = answerPayload => {
@@ -283,6 +318,63 @@ const restart = () => {
   maxStreak.value = 0;
   errorMessage.value = '';
   questionHistory.value = [];
+  endedEarly.value = false;
+};
+
+const promptEndQuiz = () => {
+  const answeredCount = questionHistory.value.length;
+  if (answeredCount === 0) {
+    confirmModalConfig.value = {
+      title: 'Exit Quiz?',
+      message: "You haven't answered any questions yet. Would you like to return to the setup screen?",
+      confirmText: 'Exit Quiz',
+      cancelText: 'Keep Playing',
+      variant: 'warning',
+      onConfirm: () => {
+        showConfirmModal.value = false;
+        restart();
+      }
+    };
+  } else {
+    confirmModalConfig.value = {
+      title: 'End Quiz Early?',
+      message: `You have answered ${answeredCount} of ${questionCount.value} questions so far (Score: ${score.value}/${answeredCount}). Ending now will calculate your final score and show your results.`,
+      confirmText: 'Finish & See Results',
+      cancelText: 'Keep Playing',
+      variant: 'primary',
+      onConfirm: () => {
+        showConfirmModal.value = false;
+        finishQuizEarly();
+      }
+    };
+  }
+  showConfirmModal.value = true;
+};
+
+const promptExitQuiz = () => {
+  confirmModalConfig.value = {
+    title: 'Leave Current Quiz?',
+    message: 'Are you sure you want to return to the setup screen? Your current quiz progress will be lost.',
+    confirmText: 'Leave Quiz',
+    cancelText: 'Stay on Quiz',
+    variant: 'warning',
+    onConfirm: () => {
+      showConfirmModal.value = false;
+      restart();
+    }
+  };
+  showConfirmModal.value = true;
+};
+
+const finishQuizEarly = () => {
+  const answeredCount = questionHistory.value.length;
+  if (answeredCount === 0) {
+    restart();
+    return;
+  }
+  endedEarly.value = true;
+  status.value = 'complete';
+  userStats.value = storage.recordQuiz(score.value, answeredCount, maxStreak.value);
 };
 
 const playAgain = () => {

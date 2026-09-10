@@ -1,142 +1,78 @@
-<div align="center">
-  <img src="public/logo.png" alt="Imran Pollob Logo" width="80" height="80" />
-  <h1>Online Trivia Quiz</h1>
-  <p><strong>Personal Brand Edition · Built with Vue 3 & Vite</strong></p>
+# Online Trivia Quiz
 
-  <p>
-    <a href="https://imranpollob.github.io/online-trivia-quiz/"><strong>Play Live Demo →</strong></a>
-  </p>
+A clean, responsive trivia quiz web app built with Vue 3 and Vite. Test your knowledge across multiple categories, customize question difficulty, challenge yourself with a countdown timer, and track your streaks — completely client-side with no backend needed.
 
-  <p>
-    <img src="https://img.shields.io/badge/Vue-3.4-0d9488?logo=vuedotjs" alt="Vue 3" />
-    <img src="https://img.shields.io/badge/Vite-5.1-0d9488?logo=vite" alt="Vite" />
-    <img src="https://img.shields.io/badge/License-MIT-0d9488" alt="License" />
-    <img src="https://img.shields.io/badge/Backend-100%25%20Serverless%20%2F%20Client--Side-0d9488" alt="Serverless" />
-    <img src="https://img.shields.io/badge/Deploy-GitHub%20Pages-0d9488?logo=github" alt="GitHub Pages" />
-  </p>
-</div>
+**[Play the Live Quiz →](https://imranpollob.github.io/online-trivia-quiz/)**
 
 ---
 
-A high-performance, accessible, and beautifully styled trivia quiz game built strictly following the **Imran Pollob Personal Brand Style** (teal palette `#0d9488`, Playfair Display serif headings, Plus Jakarta Sans body typography, 8px curvature, and 4px rhythm).
+## Features
 
-The game is **100% client-side** and requires no backend server. Questions can be dynamically pulled from the Open Trivia Database API or played instantly with the built-in offline question pack.
-
----
-
-## 🌟 Highlights & Features
-
-- **Personal Brand Design System**:
-  - Signature teal palette (`#0d9488` light / `#14b8a6` dark)
-  - Editorial font pairing (*Playfair Display* & *Plus Jakarta Sans*)
-  - Dark Mode & Light Mode with seamless transition and persistent memory
-  - Official "iP" brand monogram logo
-
-- **Usability & Accessibility (a11y)**:
-  - **Keyboard Navigation**: Press keys `1`–`4` to answer; press `Enter` or `Space` to advance to the next question.
-  - **Web Audio Sound Effects**: Zero external audio downloads; uses procedural Web Audio API synthesizers for clicks, correct chimes, incorrect tones, and victory fanfares.
-  - **Mute / Unmute Control**: Easy sound toggle with memory saved in `localStorage`.
-  - **Timer Challenge Mode**: Choose untimed (relaxed), 15 seconds (fast-paced), or 30 seconds per question with animated countdown bars and urgency indicators.
-
-- **Offline & Rate-Limit Resilience**:
-  - Automatically handles OpenTDB API rate-limiting (HTTP 429) or offline network states.
-  - Built-in curated offline question bank covering Science, History, Geography, and General Knowledge.
-
-- **Results & Deep Review**:
-  - Post-quiz review mode letting you inspect every answered question.
-  - Filter by *All*, *Correct*, or *Missed* answers.
-  - One-click score sharing via the Web Share API or Clipboard copy with streak highlights.
-
-- **Lifetime Statistics & Tracking**:
-  - Tracks quizzes completed, lifetime questions answered, overall accuracy %, best streak, and best score in `localStorage`.
-
-- **SEO & Social Optimization**:
-  - Full Open Graph and Twitter Card tags.
-  - JSON-LD Structured Data for `WebApplication` & `Quiz`.
-  - PWA Web App Manifest (`manifest.webmanifest`), `robots.txt`, and `sitemap.xml`.
+- **Customizable Quizzes**: Pick how many questions you want (5 to 25), select a difficulty (Easy, Medium, Hard), choose question format (Multiple Choice or True/False), or focus on a specific category.
+- **Timer Challenge Mode**: Play relaxed with no time limit, or turn on a 15-second or 30-second timer per question for extra challenge.
+- **Full Keyboard Navigation**: Answer questions using number keys `1`–`4`, and hit `Enter` or `Space` to jump to the next question.
+- **Subtle Sound Effects**: Procedural audio for starting a quiz, picking answers, hearing results, and finishing the game. Sounds are synthesized in the browser without downloading audio files and can be muted anytime from the header.
+- **Post-Quiz Question Review**: Review all your answers at the end of every round, with quick filters for correct and missed questions.
+- **Streaks & Lifetime Stats**: Tracks your total quizzes played, overall accuracy, and personal best streaks in local storage.
+- **Offline Question Pack**: If the trivia API is slow, rate-limited, or unavailable, you can switch immediately to a curated offline question pack with one click.
+- **Light & Dark Mode**: Adapts to your system theme by default, with a manual toggle in the header.
+- **Shareable Scores**: Easily share your results with friends using the native share menu or by copying formatted score text to your clipboard.
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+## Keyboard Shortcuts
 
 | Key | Action |
 | --- | --- |
-| `1` – `4` | Select answer choice 1 through 4 |
-| `Enter` / `Space` | Move to next question / Submit |
-| `Esc` | Close Lifetime Stats modal |
+| `1` – `4` | Select answer options |
+| `Enter` / `Space` | Advance to the next question |
+| `Esc` | Close Lifetime Stats dialog |
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
-- Node.js 18+ or 20+
-- npm 9+
 
-### Installation
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- npm
+
+### Installation & Local Run
 
 ```bash
+# Clone the repository
 git clone https://github.com/imranpollob/online-trivia-quiz.git
 cd online-trivia-quiz
+
+# Install dependencies
 npm install
-```
 
-### Development Server
-
-```bash
+# Start development server
 npm run dev
 ```
 
-Open the printed URL (default `http://localhost:5173`) in your browser.
+Open `http://localhost:5173` in your browser.
 
-### Production Build
-
-```bash
-npm run build
-```
-
-Generates optimized, static assets in `./dist`.
-
-### Local Preview
+### Build & Scripts
 
 ```bash
-npm run preview
+npm run build    # Build production bundle in ./dist
+npm run preview  # Preview the production build locally
+npm run lint     # Check code with ESLint
 ```
 
 ---
 
-## 🌐 GitHub Pages Deployment
+## Tech Stack
 
-This repository includes an automated GitHub Actions deployment workflow located at [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
-
-To deploy:
-1. Push your changes to the `master` branch on GitHub:
-   ```bash
-   git push origin master
-   ```
-2. In your GitHub repository settings, navigate to **Settings** → **Pages**:
-   - Under **Build and deployment** → **Source**, select **GitHub Actions**.
-3. Once the workflow finishes, your site is live at:
-   `https://imranpollob.github.io/online-trivia-quiz/`
+- **Framework**: [Vue 3](https://vuejs.org/) (Composition API, `<script setup>`)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Trivia API**: [Open Trivia Database](https://opentdb.com/)
+- **Audio**: Web Audio API (procedural synthesis, no audio assets)
+- **Design Tokens**: [Personal Brand Theme](https://github.com/imranpollob/personal-brand-theme)
 
 ---
 
-## 🎨 Brand Design Tokens
+## License
 
-This project implements tokens from the [Personal Brand Theme](https://imranpollob.github.io/personal-brand-theme/):
-
-```css
---color-primary: #0d9488;
---color-primary-hover: #0f766e;
---color-background: #ecfdfb;
---color-surface: #f8fafc;
---color-text: #0f172a;
---radius: 8px;
---spacing-unit: 4px;
-```
-
----
-
-## 📄 License
-
-Distributed under the MIT License. Built with ❤️ by [Imran Pollob](https://github.com/imranpollob).
+Distributed under the [MIT License](LICENSE). Built by [Imran Pollob](https://github.com/imranpollob).

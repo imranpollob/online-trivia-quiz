@@ -1,7 +1,7 @@
 <template>
   <header class="app-header" :class="status">
     <div class="brand-container">
-      <a href="#" class="brand-link" @click.prevent="emit('restart')">
+      <a href="#" class="brand-link" @click.prevent="handleBrandClick">
         <img src="../assets/logo.png" alt="Imran Pollob Brand Logo" class="brand-logo" />
         <div class="brand-text">
           <span class="brand-title">Online Trivia</span>
@@ -94,8 +94,24 @@
           </svg>
         </button>
 
-        <!-- Restart Button -->
-        <button v-if="canRestart" type="button" class="btn-restart" @click="emit('restart')">
+        <!-- Active Quiz Action: End Quiz Early -->
+        <button
+          v-if="status === 'active'"
+          type="button"
+          class="btn-end-quiz"
+          title="End quiz now and see your results"
+          @click="emit('end-quiz')"
+        >
+          End Quiz
+        </button>
+
+        <!-- Finished / Error Action: New Quiz -->
+        <button
+          v-else-if="status === 'complete' || status === 'error'"
+          type="button"
+          class="btn-restart"
+          @click="emit('restart')"
+        >
           New Quiz
         </button>
       </div>
@@ -137,11 +153,18 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['restart', 'toggle-theme', 'toggle-sound', 'open-stats']);
+const emit = defineEmits(['restart', 'toggle-theme', 'toggle-sound', 'open-stats', 'end-quiz', 'brand-click']);
+
+const handleBrandClick = () => {
+  if (props.status === 'active') {
+    emit('brand-click');
+  } else {
+    emit('restart');
+  }
+};
 
 const showProgress = computed(() => props.status === 'active' && props.total > 0);
 const showScore = computed(() => ['active', 'complete'].includes(props.status));
-const canRestart = computed(() => ['active', 'complete', 'error'].includes(props.status));
 
 const progressWidth = computed(() => {
   if (!showProgress.value) return '0%';
@@ -323,6 +346,24 @@ const progressWidth = computed(() => {
 .btn-restart:hover {
   background: var(--color-primary);
   border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.btn-end-quiz {
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  background: rgba(220, 38, 38, 0.08);
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-end-quiz:hover {
+  background: var(--color-error);
+  border-color: var(--color-error);
   color: #ffffff;
 }
 

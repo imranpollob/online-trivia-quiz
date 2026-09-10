@@ -56,6 +56,36 @@ export const soundManager = {
     }
   },
 
+  playQuizStart() {
+    if (this.muted) return;
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+      // Uplifting ascending chime: C4 (261.63) -> E4 (329.63) -> G4 (392.00) -> C5 (523.25)
+      const notes = [261.63, 329.63, 392.0, 523.25];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + i * 0.06);
+
+        gain.gain.setValueAtTime(0.12, now + i * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.28);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + i * 0.06);
+        osc.stop(now + i * 0.06 + 0.28);
+      });
+    } catch {
+      // Ignore
+    }
+  },
+
   playCorrect() {
     if (this.muted) return;
     const ctx = getAudioContext();
@@ -140,6 +170,44 @@ export const soundManager = {
       });
     } catch {
       // Ignore
+    }
+  },
+
+  playCompletion() {
+    if (this.muted) return;
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+      // Gentle resolving cadence: G4 (392.00) -> C5 (523.25)
+      const notes = [392.0, 523.25];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + i * 0.14);
+
+        gain.gain.setValueAtTime(0.12, now + i * 0.14);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.14 + 0.35);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + i * 0.14);
+        osc.stop(now + i * 0.14 + 0.35);
+      });
+    } catch {
+      // Ignore
+    }
+  },
+
+  playQuizEnd(accuracy = 0) {
+    if (accuracy >= 70) {
+      this.playVictory();
+    } else {
+      this.playCompletion();
     }
   },
 

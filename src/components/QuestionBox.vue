@@ -57,15 +57,26 @@
         <span v-else-if="answered" class="feedback-msg error">Keep going! The right answer is highlighted.</span>
       </div>
 
-      <button
-        type="button"
-        class="btn-next"
-        :disabled="!answered"
-        @click="goToNext"
-      >
-        <span>{{ index + 1 === total ? 'See Results' : 'Next Question' }}</span>
-        <span class="key-chip" aria-hidden="true">↵ Enter</span>
-      </button>
+      <div class="footer-actions">
+        <button
+          type="button"
+          class="btn-end-early"
+          title="End quiz now and see results"
+          @click="emit('end-early')"
+        >
+          End Quiz
+        </button>
+
+        <button
+          type="button"
+          class="btn-next"
+          :disabled="!answered"
+          @click="goToNext"
+        >
+          <span>{{ index + 1 === total ? 'See Results' : 'Next Question' }}</span>
+          <span class="key-chip" aria-hidden="true">↵ Enter</span>
+        </button>
+      </div>
     </footer>
   </article>
 </template>
@@ -94,7 +105,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['answer', 'next']);
+const emit = defineEmits(['answer', 'next', 'end-early']);
 
 const selectedAnswer = ref('');
 const answered = ref(false);
@@ -504,6 +515,30 @@ onUnmounted(() => {
 .feedback-msg.error,
 .feedback-msg.timeout {
   color: var(--color-error);
+}
+
+.footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-end-early {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  padding: 11px 16px;
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-end-early:hover {
+  color: var(--color-error);
+  border-color: rgba(220, 38, 38, 0.4);
+  background: rgba(220, 38, 38, 0.06);
 }
 
 .btn-next {

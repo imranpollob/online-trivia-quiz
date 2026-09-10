@@ -103,6 +103,7 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import axios from 'axios';
+import { soundManager } from '../utils/audio';
 
 const emit = defineEmits(['start', 'start-offline']);
 
@@ -140,6 +141,7 @@ const resolveCategoryName = id => {
 };
 
 const submit = () => {
+  soundManager.playClick();
   emit('start', {
     amount: form.amount,
     difficulty: form.difficulty,
@@ -152,6 +154,7 @@ const submit = () => {
 };
 
 const startOfflineQuiz = () => {
+  soundManager.playClick();
   emit('start-offline', {
     amount: form.amount,
     difficulty: form.difficulty,

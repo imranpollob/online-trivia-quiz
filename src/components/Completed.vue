@@ -235,9 +235,7 @@ const shareScore = async () => {
 };
 
 onMounted(() => {
-  if (accuracy.value >= 70) {
-    soundManager.playVictory();
-  }
+  soundManager.playQuizEnd(accuracy.value);
 });
 </script>
 

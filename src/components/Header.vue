@@ -114,6 +114,9 @@
         >
           New Quiz
         </button>
+
+        <!-- Tools launcher mount (replaced with the waffle button by launcher.js) -->
+        <span data-brand-launcher></span>
       </div>
     </div>
   </header>

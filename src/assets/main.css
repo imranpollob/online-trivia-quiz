@@ -121,10 +121,8 @@ html[data-theme="dark"] ::-webkit-scrollbar-thumb {
   }
 }
 
-/* Tools launcher toggle: mirror the header .icon-btn so it is indistinguishable
-   from the other header buttons. Scoped to the header to override launcher.css
-   by specificity (global on purpose: launcher.js replaces the mount span with a
-   plain button that carries no Vue scoped attribute). */
+/* Match the header icon controls. The launcher mounts its button inside the
+   component's slot, so these styles intentionally live outside Vue's scope. */
 .app-header .icon-actions .bl-toggle {
   width: 36px;
   height: 36px;

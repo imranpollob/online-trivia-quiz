@@ -115,15 +115,21 @@
           New Quiz
         </button>
 
-        <!-- Tools launcher mount (replaced with the waffle button by launcher.js) -->
-        <span data-brand-launcher></span>
+        <!-- Keep the tools menu last, at the top-right of the header. -->
+        <span ref="launcherSlot" class="tools-launcher"></span>
       </div>
     </div>
   </header>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
+import { mountLauncher } from '../utils/launcher';
+
+const launcherSlot = ref(null);
+let cleanupLauncher;
+onMounted(() => { cleanupLauncher = mountLauncher(launcherSlot.value); });
+onBeforeUnmount(() => cleanupLauncher?.());
 
 const props = defineProps({
   status: {
@@ -179,6 +185,8 @@ const progressWidth = computed(() => {
 <style scoped>
 .app-header {
   display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
@@ -233,6 +241,9 @@ const progressWidth = computed(() => {
 
 .controls-container {
   display: flex;
+  margin-left: auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
   gap: 16px;
 }
@@ -305,6 +316,8 @@ const progressWidth = computed(() => {
 
 .icon-actions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
   gap: 8px;
 }
@@ -384,6 +397,14 @@ const progressWidth = computed(() => {
   }
   .quiz-progress-section {
     min-width: 80px;
+  }
+
+  .controls-container {
+    gap: 8px;
+  }
+
+  .app-header.active .controls-container {
+    width: 100%;
   }
 }
 </style>

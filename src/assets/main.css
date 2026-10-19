@@ -120,3 +120,27 @@ html[data-theme="dark"] ::-webkit-scrollbar-thumb {
     scroll-behavior: auto !important;
   }
 }
+
+/* Match the header icon controls. The launcher mounts its button inside the
+   component's slot, so these styles intentionally live outside Vue's scope. */
+.app-header .icon-actions .bl-toggle {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.app-header .icon-actions .bl-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+.app-header .icon-actions .bl-toggle:hover,
+.app-header .icon-actions .bl-toggle[aria-expanded="true"] {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background-color: rgba(13, 148, 136, 0.08);
+}

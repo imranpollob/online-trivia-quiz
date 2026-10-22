@@ -2,7 +2,7 @@
   <header class="app-header" :class="status">
     <div class="brand-container">
       <a href="#" class="brand-link" @click.prevent="handleBrandClick">
-        <img src="../assets/logo.png" alt="Imran Pollob Brand Logo" class="brand-logo" />
+        <img src="../assets/logo.png" alt="Online Trivia Quiz logo" width="40" height="40" class="brand-logo" />
         <div class="brand-text">
           <span class="brand-title">Online Trivia</span>
           <span class="brand-by">by Imran Pollob</span>
